@@ -116,3 +116,52 @@ Concepts Used:
 COUNT(DISTINCT)
 Date range filtering
 Boolean filtering
+
+
+---
+
+## Q5 — Most Active User Per Day (Including Ties)
+
+**Problem:**  
+The North Pole Network wants to find the most active user(s) each day based on message count.  
+If multiple users tie for first place, return all of them.
+
+**Tables:**
+- `npn_users(user_id, user_name)`
+- `npn_messages(message_id, sender_id, sent_at)`
+
+```sql
+WITH daily_counts AS (
+  SELECT
+    DATE(m.sent_at) AS message_date,
+    u.user_name,
+    COUNT(*) AS message_count,
+    RANK() OVER (
+      PARTITION BY DATE(m.sent_at)
+      ORDER BY COUNT(*) DESC
+    ) AS activity_rank
+  FROM npn_users u
+  JOIN npn_messages m
+    ON u.user_id = m.sender_id
+  GROUP BY DATE(m.sent_at), u.user_id, u.user_name
+)
+
+SELECT
+  message_date,
+  user_name,
+  message_count
+FROM daily_counts
+WHERE activity_rank = 1
+ORDER BY message_date, user_name;
+```
+Why RANK()?
+
+RANK() assigns the same rank to tied values.
+If two users have the same highest message count, both get rank 1.
+
+Concepts Used:
+CTE (WITH)
+RANK()
+Window functions
+PARTITION BY
+Handling ties
