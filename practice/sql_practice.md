@@ -155,7 +155,6 @@ WHERE activity_rank = 1
 ORDER BY message_date, user_name;
 ```
 Why RANK()?
-
 RANK() assigns the same rank to tied values.
 If two users have the same highest message count, both get rank 1.
 
@@ -184,7 +183,6 @@ SELECT
 FROM focus_challenges;
 ```
 How It Works:
-
 DATE(start_date, '+14 days') adds 14 days to the existing date.
 SQLite allows date arithmetic directly inside the DATE() function.
 
@@ -192,3 +190,31 @@ Concepts Used:
 DATE()
 Date arithmetic
 Calculated columns
+
+---
+
+## Q7 — Day-over-Day Score Change Using LAG()
+
+**Problem:**  
+The Grinch is tracking his daily mischief scores. Find how many points his score increased or decreased each day compared to the previous day.
+
+**Table:** `grinch_mischief_log(log_date, mischief_score)`
+
+```sql
+SELECT
+  log_date,
+  mischief_score,
+  mischief_score - LAG(mischief_score) OVER (ORDER BY log_date) AS score_change
+FROM grinch_mischief_log
+ORDER BY log_date;
+```
+
+How It Works:
+LAG(mischief_score) returns the previous day's score.
+Subtracting it from the current score gives the daily change.
+
+Concepts Used:
+LAG()
+Window functions
+Time-series comparison
+ORDER BY within OVER()
