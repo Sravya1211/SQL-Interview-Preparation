@@ -54,8 +54,37 @@ Filtering continuous date ranges
 Timestamp-safe comparisons
 Performance-friendly filtering
 
+
+---
+
+## Q3 — Filtering Aggregated Results Using HAVING
+
+**Problem:**  
+Your team wants to know which labels have more than 5 emails assigned to them.
+
+**Table:** `emails(email_id, label_id)`
+
+```sql
+SELECT
+  label_id,
+  COUNT(email_id) AS email_count
+FROM emails
+GROUP BY label_id
+HAVING COUNT(email_id) > 5;
+```
+
+Explanation:
+GROUP BY label_id groups emails per label.
+COUNT(email_id) calculates total emails per label.
+HAVING filters results after aggregation.
+
+Important Distinction:
+WHERE → filters rows before aggregation.
+HAVING → filters groups after aggregation.
+
 Concepts Used:
-Date formatting
-Inclusive vs exclusive ranges
-Timestamp handling
+GROUP BY
+COUNT()
+HAVING
+Aggregation filtering
 
