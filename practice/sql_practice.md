@@ -88,3 +88,31 @@ COUNT()
 HAVING
 Aggregation filtering
 
+---
+
+## Q4 — Count Unique New Artists Recommended in April 2024
+
+**Problem:**  
+How many **unique new artists** were recommended to users in **April 2024**?  
+This helps measure diversity of recommendations during that month.
+
+**Table:** `fct_artist_recommendations(recommendation_id, user_id, artist_id, recommendation_date, is_new_artist)`
+
+```sql
+SELECT
+  COUNT(DISTINCT artist_id) AS unique_artists
+FROM fct_artist_recommendations
+WHERE recommendation_date >= '2024-04-01'
+  AND recommendation_date <  '2024-05-01'
+  AND is_new_artist = 1;
+```
+
+Why this date filter?
+
+>= '2024-04-01' AND < '2024-05-01' is timestamp-safe (works even if time exists).
+It filters exactly April 2024.
+
+Concepts Used:
+COUNT(DISTINCT)
+Date range filtering
+Boolean filtering
