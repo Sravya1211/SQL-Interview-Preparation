@@ -218,3 +218,42 @@ LAG()
 Window functions
 Time-series comparison
 ORDER BY within OVER()
+
+---
+
+## Q8 — First and Last Score Per Subject (Window Frame Control)
+
+**Problem:**  
+Over 12 days, Data Dawn tracked quiz scores across subjects.  
+Find each subject’s first and last recorded score.
+
+**Table:** `daily_quiz_scores(subject, quiz_date, score)`
+
+```sql
+SELECT
+  subject,
+  FIRST_VALUE(score) OVER (
+    PARTITION BY subject
+    ORDER BY quiz_date
+  ) AS first_score,
+  LAST_VALUE(score) OVER (
+    PARTITION BY subject
+    ORDER BY quiz_date
+    ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING
+  ) AS last_score
+FROM daily_quiz_scores
+ORDER BY subject;
+```
+
+Why the Frame Clause is Important:
+FIRST_VALUE() works naturally from the ordered partition.
+LAST_VALUE() requires a full window frame:
+ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING
+Without it, SQLite may return the last value in the current frame — not the true last row in the partition.
+
+Concepts Used:
+FIRST_VALUE()
+LAST_VALUE()
+Window framing
+PARTITION BY
+Analytical window functions
