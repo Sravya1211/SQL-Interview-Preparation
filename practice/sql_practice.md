@@ -165,3 +165,30 @@ RANK()
 Window functions
 PARTITION BY
 Handling ties
+
+---
+
+## Q6 — Add 14 Days to a Date Column
+
+**Problem:**  
+The Productivity Club wants to calculate each member’s `focus_end_date`, exactly 14 days after their `start_date`.
+
+**Table:** `focus_challenges(member_id, member_name, start_date)`
+
+```sql
+SELECT
+  member_id,
+  member_name,
+  start_date,
+  DATE(start_date, '+14 days') AS focus_end_date
+FROM focus_challenges;
+```
+How It Works:
+
+DATE(start_date, '+14 days') adds 14 days to the existing date.
+SQLite allows date arithmetic directly inside the DATE() function.
+
+Concepts Used:
+DATE()
+Date arithmetic
+Calculated columns
